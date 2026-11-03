@@ -415,4 +415,17 @@ export default {
       bestQuarter: "Best Performing Quarter",
     },
   },
+
+  // Low-stock alerts (header bell)
+  alerts: {
+    button: "Low-stock alerts",
+    title: "Low-stock alerts",
+    empty: "All items are above their reorder point",
+    loadError: "Failed to load alerts",
+    onHand: "{qty} on hand / reorder at {reorder}",
+    short: "{count} short",
+    critical: "Critical",
+    low: "Low",
+    viewInventory: "View inventory",
+  },
 };

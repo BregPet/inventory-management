@@ -169,6 +169,35 @@ def get_inventory(warehouse: Optional[str] = None, category: Optional[str] = Non
     return apply_filters(inventory_items, warehouse, category)
 
 
+class LowStockItem(InventoryItem):
+    shortfall: int
+    severity: str
+
+
+# Declared before /api/inventory/{item_id} so "low-stock" isn't captured as an id
+@app.get("/api/inventory/low-stock", response_model=List[LowStockItem])
+def get_low_stock(warehouse: Optional[str] = None, category: Optional[str] = None):
+    """Items at or below their reorder point, most urgent first.
+
+    severity is "critical" at or below half the reorder point, otherwise "low".
+    """
+    result = []
+    for item in apply_filters(inventory_items, warehouse, category):
+        qty, reorder = item["quantity_on_hand"], item["reorder_point"]
+        if qty > reorder:
+            continue
+        result.append(
+            {
+                **item,
+                "shortfall": reorder - qty,
+                "severity": "critical" if qty <= reorder / 2 else "low",
+            }
+        )
+    # Lowest stock-to-reorder ratio first; guard against a zero reorder point
+    result.sort(key=lambda i: i["quantity_on_hand"] / max(i["reorder_point"], 1))
+    return result
+
+
 @app.get("/api/inventory/{item_id}", response_model=InventoryItem)
 def get_inventory_item(item_id: str):
     """Get a specific inventory item"""

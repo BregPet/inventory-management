@@ -469,4 +469,17 @@ export default {
     "Stellar Components Ltd": "ステラコンポーネンツ",
     "Dynamic Systems Ltd": "ダイナミックシステムズ",
   },
+
+  // Low-stock alerts (header bell)
+  alerts: {
+    button: "在庫僅少アラート",
+    title: "在庫僅少アラート",
+    empty: "すべての品目が発注点を上回っています",
+    loadError: "アラートの読み込みに失敗しました",
+    onHand: "在庫 {qty} / 発注点 {reorder}",
+    short: "{count} 不足",
+    critical: "緊急",
+    low: "僅少",
+    viewInventory: "在庫を表示",
+  },
 };

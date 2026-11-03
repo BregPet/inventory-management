@@ -12,36 +12,38 @@
     </button>
     <span class="page-title">{{ pageTitle }}</span>
     <div class="header-actions">
+      <LowStockAlerts />
       <LanguageSwitcher />
     </div>
   </header>
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import NavIcon from './NavIcon.vue'
-import LanguageSwitcher from './LanguageSwitcher.vue'
-import { useI18n } from '../composables/useI18n'
-import { useLayout } from '../composables/useLayout'
-import { navItems } from '../navItems'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import NavIcon from "./NavIcon.vue";
+import LanguageSwitcher from "./LanguageSwitcher.vue";
+import LowStockAlerts from "./LowStockAlerts.vue";
+import { useI18n } from "../composables/useI18n";
+import { useLayout } from "../composables/useLayout";
+import { navItems } from "../navItems";
 
 export default {
-  name: 'AppHeader',
-  components: { NavIcon, LanguageSwitcher },
+  name: "AppHeader",
+  components: { NavIcon, LanguageSwitcher, LowStockAlerts },
   setup() {
-    const { t } = useI18n()
-    const route = useRoute()
-    const { mode, mobileOpen, openMobile } = useLayout()
+    const { t } = useI18n();
+    const route = useRoute();
+    const { mode, mobileOpen, openMobile } = useLayout();
 
     const pageTitle = computed(() => {
-      const item = navItems.find(i => i.path === route.path)
-      return item ? t(item.label) : ''
-    })
+      const item = navItems.find((i) => i.path === route.path);
+      return item ? t(item.label) : "";
+    });
 
-    return { t, mode, mobileOpen, openMobile, pageTitle }
-  }
-}
+    return { t, mode, mobileOpen, openMobile, pageTitle };
+  },
+};
 </script>
 
 <style scoped>
