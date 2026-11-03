@@ -11,6 +11,7 @@
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">{{ t('inventory.stockLevels') }} ({{ filteredItems.length }} {{ t('inventory.skus') }})</h3>
+          <div class="header-actions">
           <div class="search-box">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -31,6 +32,14 @@
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
               </svg>
             </button>
+          </div>
+          <button
+            class="btn-primary export-btn"
+            :disabled="filteredItems.length === 0"
+            @click="exportCsv"
+          >
+            {{ t('inventory.exportCsv') }}
+          </button>
           </div>
         </div>
         <div class="table-container">
@@ -196,6 +205,40 @@ export default {
       return categoryMap[category] || category
     }
 
+    // Quote a CSV field when it contains a delimiter, quote or newline (RFC 4180).
+    // Fields starting with = + - @ are prefixed with ' so spreadsheets don't run them as formulas.
+    const toCsvField = (value) => {
+      let str = value == null ? '' : String(value)
+      if (/^[=+\-@]/.test(str)) str = `'${str}`
+      return /[",\r\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str
+    }
+
+    // Export exactly the rows on screen (filters, search and sort applied), with raw numbers
+    const exportCsv = () => {
+      const headers = ['sku', 'itemName', 'category', 'quantityOnHand', 'reorderPoint', 'unitCost', 'totalValue', 'location', 'status']
+        .map(key => t(`inventory.table.${key}`))
+      const rows = filteredItems.value.map(item => [
+        item.sku,
+        translateProductName(item.name),
+        translateCategory(item.category),
+        item.quantity_on_hand,
+        item.reorder_point,
+        item.unit_cost.toFixed(2),
+        (item.quantity_on_hand * item.unit_cost).toFixed(2),
+        translateWarehouse(item.location),
+        getStockStatus(item)
+      ])
+      const csv = [headers, ...rows].map(row => row.map(toCsvField).join(',')).join('\r\n')
+      // BOM so Excel opens UTF-8 (Japanese names) correctly
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `inventory-${new Date().toISOString().slice(0, 10)}.csv`
+      link.click()
+      URL.revokeObjectURL(url)
+    }
+
     const showItemDetail = (item) => {
       selectedItem.value = item
       showItemModal.value = true
@@ -210,6 +253,7 @@ export default {
       items,
       searchQuery,
       filteredItems,
+      exportCsv,
       getStockStatus,
       getStockStatusClass,
       translateCategory,
@@ -225,6 +269,12 @@ export default {
 </script>
 
 <style scoped>
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
 
 .search-box {
   position: relative;
@@ -332,9 +382,13 @@ td:nth-child(n + 4):nth-child(-n + 7) {
     flex-wrap: wrap;
   }
 
+  .header-actions {
+    width: 100%;
+  }
+
   .search-box {
     min-width: 0;
-    width: 100%;
+    flex: 1;
   }
 }
 </style>
