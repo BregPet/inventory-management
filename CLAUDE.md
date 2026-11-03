@@ -9,6 +9,7 @@ Factory Inventory Management System Demo with GitHub integration - Full-stack ap
 ## Critical Tool Usage Rules
 
 ### Subagents
+
 Use the Task tool with these specialized subagents for appropriate tasks:
 
 - **vue-expert**: Use for Vue 3 frontend features, UI components, styling, and client-side functionality
@@ -19,15 +20,18 @@ Use the Task tool with these specialized subagents for appropriate tasks:
 - **general-purpose**: Use for complex multi-step tasks or when other agents don't fit
 
 ### Skills
+
 - **backend-api-test** skill: Use when writing or modifying tests in `tests/backend` directory with pytest and FastAPI TestClient
 
 ### MCP Tools
+
 - **ALWAYS use GitHub MCP tools** (`mcp__github__*`) for ALL GitHub operations
   - Exception: Local branches only - use `git checkout -b` instead of `mcp__github__create_branch`
 - **ALWAYS use Playwright MCP tools** (`mcp__playwright__*`) for browser testing
   - Test against: `http://localhost:3000` (frontend), `http://localhost:8001` (API)
 
 ## Stack
+
 - **Frontend**: Vue 3 + Composition API + Vite (port 3000)
 - **Backend**: Python FastAPI (port 8001)
 - **Data**: JSON files in `server/data/` loaded via `server/mock_data.py`
@@ -58,6 +62,7 @@ There is no linter, type checker, or frontend test suite configured.
 **Backend is one file.** `server/main.py` holds the Pydantic models, the filter helpers, and every route. `server/mock_data.py` loads all `server/data/*.json` into module-level lists when it is imported. Data is read-only and in memory, so restart the server after editing JSON. `tests/backend/conftest.py` puts `server/` on `sys.path` and imports `main.app` directly into a `TestClient`.
 
 **Filter contract (client and server must agree):**
+
 - `client/src/composables/useFilters.js` keeps filter state in module-level refs, so every view shares one filter state. `getCurrentFilters()` maps the UI's Location to the `warehouse` param and Period to `month`.
 - `'all'` means no filter. `api.js` leaves `'all'` values out of the query string, and the server also ignores `'all'`.
 - In `main.py`, `apply_filters()` matches `warehouse` exactly and `category`/`status` case-insensitively. `filter_by_month()` does a substring match against `order_date` (e.g. `2025-03`), or expands `Q1-2025`…`Q4-2025` through `QUARTER_MAP`, which covers 2025 only.
@@ -66,6 +71,7 @@ There is no linter, type checker, or frontend test suite configured.
 **Frontend:** routes live in `client/src/main.js`. All HTTP calls go through `client/src/api.js` (base URL hardcoded to `http://localhost:8001/api`). UI strings go through `useI18n` with `client/src/locales/en.js` and `ja.js`, so add new strings to both. `client/CLAUDE.md` and `server/CLAUDE.md` contain more detailed conventions for each side.
 
 ## API Endpoints
+
 - `GET /api/inventory` (filters: warehouse, category), `GET /api/inventory/{id}`
 - `GET /api/orders` (filters: warehouse, category, status, month), `GET /api/orders/{id}`
 - `GET /api/dashboard/summary` - All filters
@@ -78,15 +84,18 @@ There is no linter, type checker, or frontend test suite configured.
 Every `demand_forecasts.json` SKU must exist in `inventory.json`; restocking takes stock and prices from inventory, and a test enforces this.
 
 ## Known Gaps (as of 2026-11-03)
+
 - `client/src/api.js` calls `/api/tasks` (GET/POST/DELETE/PATCH) and `/api/purchase-orders` (POST, GET by backlog item), but the backend has none of these routes. The pending models `PurchaseOrder`/`CreatePurchaseOrderRequest` already exist in `main.py`.
 - `Dashboard.vue` uses `<PurchaseOrderModal>`, which does not exist in `client/src/components/`.
 - `tests/README.md` lists `test_orders.py`, but that file is missing. The suite has 59 tests, not 51.
 - `server/generate_data.py` uses an old product catalog (Widgets/Components, etc.) and overwrites `data/orders.json`. Don't run it unless you intend to replace the current data.
 
 ## Code Conventions
+
 - Always document non-obvious logic changes with comments
 
 ## Common Issues
+
 1. Use unique keys in v-for (not `index`) - use `sku`, `month`, etc.
 2. Validate dates before `.getMonth()` calls
 3. Update Pydantic models when changing JSON data structure
@@ -94,6 +103,7 @@ Every `demand_forecasts.json` SKU must exist in `inventory.json`; restocking tak
 5. Revenue goals: $800K/month single, $9.6M YTD all months
 
 ## File Locations
+
 - Views: `client/src/views/*.vue`
 - API Client: `client/src/api.js`
 - Backend: `server/main.py`, `server/mock_data.py`
@@ -102,9 +112,11 @@ Every `demand_forecasts.json` SKU must exist in `inventory.json`; restocking tak
 - Shell: `AppSidebar.vue`, `AppHeader.vue`, `NavIcon.vue` in `client/src/components/`; nav items in `client/src/navItems.js` (add new routes there too); sidebar state in `composables/useLayout.js`
 
 ## Design System
+
 - Use the CSS variables from `tokens.css` (4px spacing scale, radii, colours); no literal values in new styles
-- Colors: Slate/gray (#0f172a, #64748b, #e2e8f0), deep-blue accent (`--color-primary`)
-- Status: green/blue/yellow/red
+- Colors: dark navy theme (`--color-bg`/`--color-surface`/`--color-surface-muted`), orange accent (`--color-primary`; text on orange fills uses `--color-on-primary`, which is navy). Never hardcode hex or `white` in components; every colour in `.vue` files is a token
+- Status: green/blue/yellow/red (`--color-{success,info,warning,danger}` plus `-soft`, `-text`, `-border`). Warning is yellow so it stays distinct from the orange accent; chart series such as Shipped use `--color-info`, not the accent
+- SVG `fill`/`stroke` presentation attributes don't resolve `var()`; set them via `style="stroke: var(--…)"`
 - Type: IBM Plex Sans for UI, IBM Plex Mono for figures (bundled via `@fontsource`; only weights 400/500/600 are loaded)
 - Sidebar: full at >= 1280px (collapse remembered), icon rail at 768-1279px, drawer below 768px
 - Charts: Custom SVG, CSS Grid for layouts

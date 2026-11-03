@@ -265,7 +265,7 @@ export default {
 }
 
 .budget-label {
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -288,7 +288,7 @@ export default {
 
 .budget-hint {
   margin-top: 0.5rem;
-  color: #94a3b8;
+  color: var(--color-text-subtle);
   font-size: 0.813rem;
 }
 
@@ -345,7 +345,7 @@ export default {
 .empty {
   padding: 2rem;
   text-align: center;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 

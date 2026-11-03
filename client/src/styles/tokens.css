@@ -1,6 +1,6 @@
 /*
- * Design tokens: Precision slate.
- * Slate neutrals and green/blue/amber/red status colours from the project design system,
+ * Design tokens: Navy and orange (dark theme).
+ * Dark navy neutrals, an orange accent and green/blue/yellow/red status colours,
  * IBM Plex Sans for UI text and IBM Plex Mono for figures.
  * Every spacing, radius, colour and type value in the app should come from here.
  */
@@ -18,8 +18,11 @@
   --space-12: 48px;
 
   /* Type. Plex is bundled via @fontsource (imported in main.js); system stack is the fallback. */
-  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans:
+    "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+    Arial, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-2xs: 11px;
   --text-xs: 12px;
   --text-sm: 13px;
@@ -41,34 +44,58 @@
   --radius-lg: 8px;
   --radius-full: 999px;
 
-  /* Elevation: hairlines do most of the work; shadows only for floating layers */
-  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.04);
-  --shadow-md: 0 6px 16px rgb(15 23 42 / 0.08), 0 1px 3px rgb(15 23 42 / 0.06);
-  --shadow-lg: 0 16px 40px rgb(15 23 42 / 0.14);
+  /* Native controls (selects, scrollbars, date pickers) render dark too */
+  color-scheme: dark;
 
-  /* Neutrals: slate */
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f1f5f9;
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
-  --color-text: #0f172a;
-  --color-text-secondary: #334155;
-  --color-text-muted: #64748b;
-  --color-text-subtle: #94a3b8;
+  /* Elevation: on a dark canvas shadows need far more opacity to read */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 6px 16px rgb(0 0 0 / 0.4), 0 1px 3px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 16px 40px rgb(0 0 0 / 0.5);
+  --color-overlay: rgb(4 9 20 / 0.7);
 
-  /* Accent: deep blue */
-  --color-primary: #1d4ed8;
-  --color-primary-hover: #1e40af;
-  --color-primary-soft: #eff4ff;
-  --color-primary-text: #1e3a8a;
-  --color-focus-ring: rgb(29 78 216 / 0.45);
+  /* Neutrals: dark navy. bg is the page, surface the cards, surface-muted hovers and table heads */
+  --color-bg: #0a1224;
+  --color-surface: #101c36;
+  --color-surface-muted: #172747;
+  --color-border: #213459;
+  --color-border-strong: #2f4876;
+  --color-text: #e8eef9;
+  --color-text-secondary: #c3cee2;
+  --color-text-muted: #8d9cba;
+  --color-text-subtle: #66779c;
 
-  /* Status: soft background + strong text from the same hue */
-  --color-success: #15803d;  --color-success-soft: #f0fdf4;  --color-success-text: #166534;
-  --color-info: #1d4ed8;     --color-info-soft: #eff4ff;     --color-info-text: #1e3a8a;
-  --color-warning: #b45309;  --color-warning-soft: #fffbeb;  --color-warning-text: #92400e;
-  --color-danger: #b91c1c;   --color-danger-soft: #fef2f2;   --color-danger-text: #991b1b;
+  /* Accent: orange. Text on orange fills is navy; white on orange fails contrast */
+  --color-primary: #f97316;
+  --color-primary-hover: #fb8c3f;
+  --color-primary-soft: rgb(249 115 22 / 0.14);
+  --color-primary-border: rgb(249 115 22 / 0.4);
+  --color-primary-text: #fdba74;
+  --color-on-primary: #0a1224;
+  --color-focus-ring: rgb(249 115 22 / 0.5);
+
+  /* Status: translucent soft background + light tint text, tuned for the navy surfaces.
+     Warning is yellow rather than amber so it stays distinct from the orange accent. */
+  --color-success: #22c55e;
+  --color-success-soft: rgb(34 197 94 / 0.14);
+  --color-success-text: #86efac;
+  --color-success-border: rgb(34 197 94 / 0.4);
+  --color-info: #60a5fa;
+  --color-info-soft: rgb(96 165 250 / 0.14);
+  --color-info-text: #93c5fd;
+  --color-info-border: rgb(96 165 250 / 0.4);
+  --color-warning: #eab308;
+  --color-warning-soft: rgb(234 179 8 / 0.14);
+  --color-warning-text: #fde047;
+  --color-warning-border: rgb(234 179 8 / 0.4);
+  --color-danger: #f87171;
+  --color-danger-soft: rgb(248 113 113 / 0.14);
+  --color-danger-text: #fca5a5;
+  --color-danger-border: rgb(248 113 113 / 0.4);
+
+  /* Extra chart hue for the one non-status series (tasks) */
+  --color-violet: #a78bfa;
+  --color-violet-soft: rgb(167 139 250 / 0.14);
+  --color-violet-border: rgb(167 139 250 / 0.4);
 
   /* Layout */
   --sidebar-width: 240px;
@@ -84,11 +111,18 @@
 }
 
 @media (max-width: 1279px) {
-  :root { --content-padding: var(--space-6); }
+  :root {
+    --content-padding: var(--space-6);
+  }
 }
 @media (max-width: 767px) {
-  :root { --content-padding: var(--space-4); }
+  :root {
+    --content-padding: var(--space-4);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  :root { --duration-fast: 0ms; --duration-base: 0ms; }
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
 }

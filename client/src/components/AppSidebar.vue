@@ -298,7 +298,7 @@ export default {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgb(15 23 42 / 0.4);
+  background: var(--color-overlay);
 }
 
 .sidebar-scrim.is-tablet {
