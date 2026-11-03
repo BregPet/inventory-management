@@ -6,6 +6,14 @@ export default {
     orders: '注文',
     finance: '財務',
     demandForecast: '需要予測',
+    restocking: '補充',
+    reports: 'レポート',
+    groupOperations: 'オペレーション',
+    groupAnalytics: '分析',
+    mainNavigation: 'メインナビゲーション',
+    openMenu: 'メニューを開く',
+    collapseSidebar: 'サイドバーを折りたたむ',
+    expandSidebar: 'サイドバーを展開',
     companyName: '触媒コンポーネンツ',
     subtitle: '在庫管理システム'
   },
@@ -112,6 +120,19 @@ export default {
     onTimeDelivery: '定時配達',
     itemsCount: '{count}件',
     quantity: '数量',
+    submitted: {
+      title: '送信済み注文',
+      empty: '送信済みの補充注文はまだありません。',
+      itemsSummary: '{count}件、{quantity}個',
+      table: {
+        submittedDate: '送信日',
+        items: '品目',
+        totalCost: '合計費用',
+        leadTime: 'リードタイム（日）',
+        expectedDelivery: '予定配達日',
+        status: 'ステータス'
+      }
+    },
     table: {
       orderNumber: '注文番号',
       orderId: '注文ID',
@@ -202,11 +223,46 @@ export default {
   status: {
     delivered: '配達済み',
     shipped: '出荷済み',
+    submitted: '送信済み',
     processing: '処理中',
     backordered: 'バックオーダー',
     inStock: '在庫あり',
     lowStock: '在庫僅少',
     adequate: '適量'
+  },
+
+  // Restocking
+  restocking: {
+    title: '補充',
+    description: '予算の範囲内で予測不足分の購入を計画します',
+    budget: '予算',
+    budgetHint: '上限: {max}（すべての不足分を補う費用）',
+    plannedSpend: '計画支出',
+    remainingBudget: '残予算',
+    itemsToOrder: '発注品目数',
+    recommendations: '推奨購入',
+    empty: 'この予算では補充品目を購入できません。予算を増やすと推奨が表示されます。',
+    placeOrder: '発注する',
+    placing: '発注中...',
+    orderPlaced: '注文 {orderNumber} を送信しました',
+    expectedDelivery: '予定配達日: {date}',
+    viewOrders: '注文で確認',
+    orderFailed: '発注に失敗しました: {message}',
+    loadFailed: '推奨の読み込みに失敗しました: {message}',
+    table: {
+      sku: 'SKU',
+      name: '品目名',
+      category: 'カテゴリ',
+      warehouse: '倉庫',
+      trend: 'トレンド',
+      onHand: '手持在庫',
+      forecast: '予測',
+      shortfall: '不足数',
+      recommendedQty: '発注数量',
+      unitCost: '単価',
+      lineTotal: '小計',
+      leadTime: 'リードタイム（日）'
+    }
   },
 
   // Trends

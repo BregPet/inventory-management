@@ -225,34 +225,6 @@ export default {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 1.5rem;
-}
-
-.page-header h2 {
-  margin-bottom: 0.25rem;
-}
-
-.page-header p {
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #0f172a;
-  margin: 0;
-}
 
 .search-box {
   position: relative;
@@ -325,7 +297,7 @@ export default {
 }
 
 .error {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .clickable-row {
@@ -334,6 +306,35 @@ export default {
 }
 
 .clickable-row:hover {
-  background: #eff6ff !important;
+  background: var(--color-primary-soft) !important;
+}
+
+/* Quantity and currency columns: right-aligned mono figures */
+td:nth-child(1),
+td:nth-child(8) {
+  white-space: nowrap;
+}
+
+td:nth-child(1),
+td:nth-child(n + 4):nth-child(-n + 7) {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+th:nth-child(n + 4):nth-child(-n + 7),
+td:nth-child(n + 4):nth-child(-n + 7) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .card-header {
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    min-width: 0;
+    width: 100%;
+  }
 }
 </style>
