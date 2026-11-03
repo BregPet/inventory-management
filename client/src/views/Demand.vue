@@ -272,7 +272,7 @@ export default {
   justify-content: center;
   border-radius: 10px;
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
@@ -301,7 +301,7 @@ export default {
 
 .trend-count {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   margin-top: 0.25rem;
 }
@@ -339,7 +339,7 @@ export default {
 
 .item-change {
   font-size: 0.813rem;
-  font-weight: 700;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
@@ -365,5 +365,16 @@ export default {
   font-style: italic;
   text-align: center;
   padding: 0.5rem;
+}
+
+td:nth-child(1) {
+  white-space: nowrap;
+}
+
+td:nth-child(1),
+td:nth-child(3),
+td:nth-child(4) {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
 }
 </style>

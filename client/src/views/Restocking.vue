@@ -251,18 +251,6 @@ export default {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 1.5rem;
-}
-
-.page-header h2 {
-  margin-bottom: 0.25rem;
-}
-
-.page-header p {
-  color: #64748b;
-  font-size: 0.875rem;
-}
 
 .budget-card {
   padding: 1.25rem 1.5rem;
@@ -285,14 +273,16 @@ export default {
 }
 
 .budget-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
 }
 
 .budget-slider {
   width: 100%;
-  accent-color: #3b82f6;
+  accent-color: var(--color-primary);
   cursor: pointer;
 }
 
@@ -302,45 +292,9 @@ export default {
   font-size: 0.813rem;
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #0f172a;
-  margin: 0;
-}
-
-.btn-primary {
-  padding: 0.5rem 1.25rem;
-  background: #0f172a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #1e293b;
-}
-
-.btn-primary:disabled {
-  background: #cbd5e1;
-  cursor: not-allowed;
-}
-
 .num {
   text-align: right;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
@@ -356,21 +310,21 @@ export default {
   gap: 1rem;
   padding: 0.875rem 1.25rem;
   margin-bottom: 1.5rem;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid;
   font-size: 0.875rem;
 }
 
 .alert-success {
-  background: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #065f46;
+  background: var(--color-success-soft);
+  border-color: var(--color-success);
+  color: var(--color-success-text);
 }
 
 .alert-error {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #b91c1c;
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 
 .alert-detail {
@@ -378,8 +332,8 @@ export default {
 }
 
 .alert-link {
-  color: #2563eb;
-  font-weight: 600;
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -394,14 +348,15 @@ export default {
   color: #64748b;
 }
 
-.loading,
-.error {
-  padding: 2rem;
-  text-align: center;
-  color: #64748b;
+
+tbody td:first-child {
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
 }
 
+.loading,
 .error {
-  color: #ef4444;
+  padding: var(--space-8);
 }
 </style>

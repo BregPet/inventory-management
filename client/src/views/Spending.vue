@@ -509,7 +509,7 @@ export default {
 }
 
 .change-icon {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1rem;
 }
 
@@ -722,7 +722,7 @@ export default {
 }
 
 .category-amount {
-  font-weight: 700;
+  font-weight: 600;
   color: #2563eb;
   font-size: 1.125rem;
 }
@@ -737,7 +737,7 @@ export default {
 
 .category-bar {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  background: var(--color-primary);
   border-radius: 4px;
   transition: width 0.6s ease;
 }
@@ -823,7 +823,7 @@ export default {
 .transaction-id {
   color: #64748b;
   font-weight: 500;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.813rem;
 }
 
@@ -842,7 +842,8 @@ export default {
 }
 
 .transaction-amount {
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
   color: #0f172a;
 }
 

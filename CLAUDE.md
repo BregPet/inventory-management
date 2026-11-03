@@ -98,10 +98,14 @@ Every `demand_forecasts.json` SKU must exist in `inventory.json`; restocking tak
 - API Client: `client/src/api.js`
 - Backend: `server/main.py`, `server/mock_data.py`
 - Data: `server/data/*.json`
-- Styles: `client/src/App.vue`
+- Styles: tokens in `client/src/styles/tokens.css`; global primitives (`.card`, `.stat-card`, `.badge`, tables, `.btn-primary`) in the unscoped `<style>` of `client/src/App.vue`
+- Shell: `AppSidebar.vue`, `AppHeader.vue`, `NavIcon.vue` in `client/src/components/`; nav items in `client/src/navItems.js` (add new routes there too); sidebar state in `composables/useLayout.js`
 
 ## Design System
-- Colors: Slate/gray (#0f172a, #64748b, #e2e8f0)
+- Use the CSS variables from `tokens.css` (4px spacing scale, radii, colours); no literal values in new styles
+- Colors: Slate/gray (#0f172a, #64748b, #e2e8f0), deep-blue accent (`--color-primary`)
 - Status: green/blue/yellow/red
+- Type: IBM Plex Sans for UI, IBM Plex Mono for figures (bundled via `@fontsource`; only weights 400/500/600 are loaded)
+- Sidebar: full at >= 1280px (collapse remembered), icon rail at 768-1279px, drawer below 768px
 - Charts: Custom SVG, CSS Grid for layouts
 - No emojis in UI

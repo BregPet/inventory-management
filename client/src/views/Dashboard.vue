@@ -731,83 +731,86 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-6);
 }
 
 .header-meta {
-  font-size: 0.813rem;
-  color: #64748b;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 .kpi-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .section-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #475569;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: var(--space-3);
 }
 
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .kpi-card {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
 }
 
 .kpi-header {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-2);
 }
 
 .kpi-label {
-  font-size: 0.813rem;
-  font-weight: 600;
-  color: #64748b;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: var(--tracking-label);
 }
 
 .kpi-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.025em;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.02em;
 }
 
 .kpi-goal {
-  font-size: 0.813rem;
-  color: #64748b;
-  margin-bottom: 0.75rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
 }
 
 .kpi-progress-bar {
   width: 100%;
-  height: 6px;
-  background: #f1f5f9;
-  border-radius: 3px;
+  height: 4px;
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .kpi-progress {
   height: 100%;
-  background: #3b82f6;
-  border-radius: 3px;
-  transition: width 0.6s ease;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-base) var(--ease-out);
 }
 
 .kpi-progress.success {
-  background: #10b981;
+  background: var(--color-success);
 }
 
 .charts-grid {
@@ -890,9 +893,10 @@ export default {
 }
 
 .donut-center-value {
-  font-size: 36px;
+  font-family: var(--font-mono);
+  font-size: 32px;
   fill: #0f172a;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .donut-legend-compact {
@@ -927,30 +931,32 @@ export default {
 }
 
 .health-metric-label {
-  font-size: 0.688rem;
-  color: #64748b;
-  font-weight: 600;
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-label);
 }
 
 .health-metric-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
 }
 
 .metric-good {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .metric-warning {
-  color: #f59e0b;
+  color: var(--color-warning);
 }
 
 .metric-bad {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .horizontal-bar-chart {
@@ -994,7 +1000,7 @@ export default {
 
 .h-bar-value {
   font-size: 0.813rem;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
 }
 
@@ -1143,7 +1149,7 @@ export default {
 
 .task-add-btn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -1248,24 +1254,20 @@ export default {
 }
 
 .po-button.create {
-  background: #3b82f6;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-surface);
 }
 
 .po-button.create:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  background: var(--color-primary-hover);
 }
 
 .po-button.view {
-  background: #64748b;
-  color: white;
+  background: var(--color-text-muted);
+  color: var(--color-surface);
 }
 
 .po-button.view:hover {
-  background: #475569;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(100, 116, 139, 0.3);
+  background: var(--color-text-secondary);
 }
 </style>

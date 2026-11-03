@@ -1,45 +1,16 @@
 <template>
-  <div class="app">
-    <header class="top-nav">
-      <div class="nav-container">
-        <div class="logo">
-          <h1>{{ t('nav.companyName') }}</h1>
-          <span class="subtitle">{{ t('nav.subtitle') }}</span>
-        </div>
-        <nav class="nav-tabs">
-          <router-link to="/" :class="{ active: $route.path === '/' }">
-            {{ t('nav.overview') }}
-          </router-link>
-          <router-link to="/inventory" :class="{ active: $route.path === '/inventory' }">
-            {{ t('nav.inventory') }}
-          </router-link>
-          <router-link to="/orders" :class="{ active: $route.path === '/orders' }">
-            {{ t('nav.orders') }}
-          </router-link>
-          <router-link to="/spending" :class="{ active: $route.path === '/spending' }">
-            {{ t('nav.finance') }}
-          </router-link>
-          <router-link to="/demand" :class="{ active: $route.path === '/demand' }">
-            {{ t('nav.demandForecast') }}
-          </router-link>
-          <router-link to="/restocking" :class="{ active: $route.path === '/restocking' }">
-            {{ t('nav.restocking') }}
-          </router-link>
-          <router-link to="/reports" :class="{ active: $route.path === '/reports' }">
-            Reports
-          </router-link>
-        </nav>
-        <LanguageSwitcher />
-        <ProfileMenu
-          @show-profile-details="showProfileDetails = true"
-          @show-tasks="showTasks = true"
-        />
-      </div>
-    </header>
-    <FilterBar />
-    <main class="main-content">
-      <router-view />
-    </main>
+  <div class="app-shell" :class="'mode-' + mode + (isRail ? ' is-rail' : '')">
+    <AppSidebar
+      @show-profile-details="showProfileDetails = true"
+      @show-tasks="showTasks = true"
+    />
+    <div class="app-main">
+      <AppHeader />
+      <FilterBar />
+      <main class="main-content">
+        <router-view />
+      </main>
+    </div>
 
     <ProfileDetailsModal
       :is-open="showProfileDetails"
@@ -63,23 +34,25 @@ import { api } from './api'
 import { useAuth } from './composables/useAuth'
 import { useI18n } from './composables/useI18n'
 import FilterBar from './components/FilterBar.vue'
-import ProfileMenu from './components/ProfileMenu.vue'
+import AppSidebar from './components/AppSidebar.vue'
+import AppHeader from './components/AppHeader.vue'
+import { useLayout } from './composables/useLayout'
 import ProfileDetailsModal from './components/ProfileDetailsModal.vue'
 import TasksModal from './components/TasksModal.vue'
-import LanguageSwitcher from './components/LanguageSwitcher.vue'
 
 export default {
   name: 'App',
   components: {
     FilterBar,
-    ProfileMenu,
+    AppSidebar,
+    AppHeader,
     ProfileDetailsModal,
-    TasksModal,
-    LanguageSwitcher
+    TasksModal
   },
   setup() {
     const { currentUser } = useAuth()
     const { t } = useI18n()
+    const { mode, isRail } = useLayout()
     const showProfileDetails = ref(false)
     const showTasks = ref(false)
     const apiTasks = ref([])
@@ -153,6 +126,8 @@ export default {
 
     return {
       t,
+      mode,
+      isRail,
       showProfileDetails,
       showTasks,
       tasks,
@@ -172,202 +147,154 @@ export default {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #f8fafc;
-  color: #1e293b;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  background: var(--color-bg);
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.app {
-  display: flex;
-  flex-direction: column;
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Shell layout: the sidebar is fixed, the main column is offset by its docked width */
+.app-shell {
+  --sidebar-offset: var(--sidebar-width);
   min-height: 100vh;
 }
 
-.top-nav {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.app-shell.is-rail,
+.app-shell.mode-tablet {
+  --sidebar-offset: var(--sidebar-width-rail);
 }
 
-.nav-container {
-  max-width: 1600px;
-  margin: 0 auto;
+.app-shell.mode-mobile {
+  --sidebar-offset: 0px;
+}
+
+.app-main {
+  min-height: 100vh;
+  min-width: 0;
+  margin-left: var(--sidebar-offset);
   display: flex;
-  align-items: center;
-  padding: 0 2rem;
-  height: 70px;
-}
-
-.nav-container > .nav-tabs {
-  margin-left: auto;
-  margin-right: 1rem;
-}
-
-.nav-container > .language-switcher {
-  margin-right: 1rem;
-}
-
-.logo {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-}
-
-.logo h1 {
-  font-size: 1.375rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
-}
-
-.subtitle {
-  font-size: 0.813rem;
-  color: #64748b;
-  font-weight: 400;
-  padding-left: 0.75rem;
-  border-left: 1px solid #e2e8f0;
-}
-
-.nav-tabs {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.nav-tabs a {
-  padding: 0.625rem 1.25rem;
-  color: #64748b;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.938rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.nav-tabs a:hover {
-  color: #0f172a;
-  background: #f1f5f9;
-}
-
-.nav-tabs a.active {
-  color: #2563eb;
-  background: #eff6ff;
-}
-
-.nav-tabs a.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #2563eb;
+  flex-direction: column;
+  transition: margin-left var(--duration-base) var(--ease-out);
 }
 
 .main-content {
   flex: 1;
-  max-width: 1600px;
   width: 100%;
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 1.5rem 2rem;
+  padding: var(--space-6) var(--content-padding) var(--space-12);
 }
 
 .page-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .page-header h2 {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 0.375rem;
-  letter-spacing: -0.025em;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+  letter-spacing: -0.01em;
 }
 
 .page-header p {
-  color: #64748b;
-  font-size: 0.938rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .stat-card {
-  background: white;
-  padding: 1.25rem;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
 .stat-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-border-strong);
 }
 
+.stat-card.warning::before,
+.stat-card.success::before,
+.stat-card.danger::before,
+.stat-card.info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.stat-card.warning::before { background: var(--color-warning); }
+.stat-card.success::before { background: var(--color-success); }
+.stat-card.danger::before { background: var(--color-danger); }
+.stat-card.info::before { background: var(--color-info); }
+
 .stat-label {
-  color: #64748b;
-  font-size: 0.875rem;
-  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.625rem;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: var(--space-2);
 }
 
 .stat-value {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
 }
 
-.stat-card.warning .stat-value {
-  color: #ea580c;
-}
-
-.stat-card.success .stat-value {
-  color: #059669;
-}
-
-.stat-card.danger .stat-value {
-  color: #dc2626;
-}
-
-.stat-card.info .stat-value {
-  color: #2563eb;
-}
+.stat-card.warning .stat-value { color: var(--color-warning); }
+.stat-card.success .stat-value { color: var(--color-success); }
+.stat-card.danger .stat-value { color: var(--color-danger); }
+.stat-card.info .stat-value { color: var(--color-info); }
 
 .card {
-  background: white;
-  border-radius: 10px;
-  padding: 1.25rem;
-  border: 1px solid #e2e8f0;
-  margin-bottom: 1.25rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-5);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.875rem;
-  border-bottom: 1px solid #e2e8f0;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .card-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
 }
 
 .table-container {
@@ -377,113 +304,152 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
 }
 
 thead {
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--color-surface-muted);
 }
 
 th {
   text-align: left;
-  padding: 0.5rem 0.75rem;
-  font-weight: 600;
-  color: #475569;
-  font-size: 0.75rem;
+  padding: var(--space-3);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-label);
+  white-space: nowrap;
 }
 
 td {
-  padding: 0.5rem 0.75rem;
-  border-top: 1px solid #f1f5f9;
-  color: #334155;
-  font-size: 0.875rem;
+  height: 44px;
+  padding: 0 var(--space-3);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+}
+
+td strong {
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+th.num,
+td.num {
+  text-align: right;
+}
+
+td.num {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  white-space: nowrap;
 }
 
 tbody tr {
-  transition: background-color 0.15s ease;
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 tbody tr:hover {
-  background: #f8fafc;
+  background: var(--color-surface-muted);
 }
 
 .badge {
   display: inline-block;
-  padding: 0.313rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-normal);
+  white-space: nowrap;
 }
 
-.badge.success {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.badge.warning {
-  background: #fed7aa;
-  color: #92400e;
-}
-
-.badge.danger {
-  background: #fecaca;
-  color: #991b1b;
-}
-
-.badge.info {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
+.badge.success,
 .badge.increasing {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--color-success-soft);
+  color: var(--color-success-text);
 }
 
-.badge.decreasing {
-  background: #fecaca;
-  color: #991b1b;
+.badge.warning,
+.badge.medium {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+}
+
+.badge.danger,
+.badge.decreasing,
+.badge.high {
+  background: var(--color-danger-soft);
+  color: var(--color-danger-text);
+}
+
+.badge.info,
+.badge.low {
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
 }
 
 .badge.stable {
-  background: #e0e7ff;
-  color: #3730a3;
-}
-
-.badge.high {
-  background: #fecaca;
-  color: #991b1b;
-}
-
-.badge.medium {
-  background: #fed7aa;
-  color: #92400e;
-}
-
-.badge.low {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
 }
 
 .loading {
   text-align: center;
-  padding: 3rem;
-  color: #64748b;
-  font-size: 0.938rem;
+  padding: var(--space-12);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
 }
 
 .error {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-  font-size: 0.938rem;
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger-text);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin: var(--space-4) 0;
+  font-size: var(--text-base);
+}
+
+/* One restrained reveal per route change: views are re-created on navigation */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.main-content .stat-card,
+.main-content .card {
+  animation: reveal calc(var(--duration-base) * 1.5) var(--ease-out) backwards;
+}
+
+.main-content .stat-card:nth-child(2) { animation-delay: calc(var(--duration-fast) * 0.4); }
+.main-content .stat-card:nth-child(3) { animation-delay: calc(var(--duration-fast) * 0.8); }
+.main-content .stat-card:nth-child(4) { animation-delay: calc(var(--duration-fast) * 1.2); }
+.main-content .stat-card:nth-child(n + 5) { animation-delay: calc(var(--duration-fast) * 1.6); }
+.main-content .card { animation-delay: calc(var(--duration-fast) * 0.8); }
+
+.btn-primary {
+  height: 36px;
+  padding: 0 var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border: 0;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.btn-primary:disabled {
+  background: var(--color-border-strong);
+  cursor: not-allowed;
 }
 </style>

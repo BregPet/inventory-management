@@ -276,8 +276,8 @@ export default {
 
 .items-summary {
   cursor: pointer;
-  color: #3b82f6;
-  font-weight: 500;
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
   list-style: none;
   user-select: none;
   display: inline-block;
@@ -300,7 +300,7 @@ export default {
 }
 
 .items-summary:hover {
-  color: #2563eb;
+  color: var(--color-primary-hover);
   text-decoration: underline;
 }
 
@@ -341,5 +341,16 @@ export default {
 .item-meta {
   font-size: 0.813rem;
   color: #64748b;
+}
+
+td.col-order-number,
+td.col-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+th.col-value,
+td.col-value {
+  text-align: right;
 }
 </style>
